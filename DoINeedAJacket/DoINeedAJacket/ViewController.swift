@@ -52,14 +52,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if let location = locations.last {
             lat = "\(location.coordinate.latitude)"
             lng = "\(location.coordinate.longitude)"
-            print(lat)
-            print(lng)
         }
     }
     
     //Get Weather fun
     
     func jacketGetter(lat: String, long: String){
+        var didInit:Bool? // checking if ran for the first time
         weatherLib.getWeather(lat: lat, long: long) { (allWeather) in
             let t = allWeather.value(forKeyPath: "main.temp") as! Double
             
@@ -86,24 +85,29 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
         
         // init loop
-        while temp == 100.0{
+        while temp == 100.0 && didInit != true{
             if temp == 100.0{
                 //init
+                didInit = false
             }
             else if temp < 0.0{
                 print("freezing")
                 self.jacketLabel.text = "Get your Winter Coat!"
+                didInit = true
             }
             else if temp < 10.0{
                 print("colder")
                 self.jacketLabel.text = "Better put on a jacket"
+                didInit = true
             }
             else if temp < 15.0{
                 print("sweater weather")
                 self.jacketLabel.text = "Sweater Weather!"
+                didInit = true
             }else{
                 print ("nope")
                 self.jacketLabel.text = "T-Shirt Time"
+                didInit = true
             }
         }
     }
